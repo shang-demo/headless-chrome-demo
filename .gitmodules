@@ -1,0 +1,8 @@
+[submodule "jd-screenshot"]
+	path = jd-screenshot
+	url = git@github.com:shang-demo/headless-chrome-demo.git
+	branch = jd-screenshot
+[submodule "zhihu-login"]
+	path = zhihu-login
+	url = git@github.com:shang-demo/headless-chrome-demo.git
+	branch = zhihu-login
