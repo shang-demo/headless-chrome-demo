@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "url": "git@gitlab.com:xinshangshangxin/ci-test.git",
+    "remote": "ci-test",
+    "branch": "__package_name__"
+  },
+  "prod": {
+    "url": "git@gitlab.com:demoshang/server-projects.git",
+    "remote": "prod",
+    "branch": "__package_name__"
+  }
+}

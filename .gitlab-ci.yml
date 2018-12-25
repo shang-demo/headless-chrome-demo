@@ -1,0 +1,21 @@
+image: docker
+
+services:
+  - docker:dind
+
+variables:
+  CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - echo "docker pull ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME}"
+    - docker pull ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME} || true
+    - docker build --cache-from ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME} --tag ${CONTAINER_IMAGE}:${CI_BUILD_REF} --tag ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME} .
+    - docker push ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME}
