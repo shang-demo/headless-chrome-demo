@@ -7,7 +7,7 @@
     "access": "public"
   },
   "scripts": {
-    "start": "./node_modules/.bin/ts-node --project tsconfig.json --files src/index.ts",
+    "start": "./node_modules/.bin/ts-node --project tsconfig.json --files index.ts",
     "lint": "gulp eslint",
     "lint-fix": "./node_modules/.bin/eslint src/**/*.ts --fix",
     "watch": "gulp",
