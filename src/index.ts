@@ -1,5 +1,7 @@
 import puppeteer from 'puppeteer';
 import rp from 'request-promise';
+import { writeJson } from 'fs-extra';
+import { resolve as pathResolve } from 'path';
 
 (async () => {
   const browser = await puppeteer.launch({
@@ -7,40 +9,42 @@ import rp from 'request-promise';
   });
   const context = await browser.createIncognitoBrowserContext();
   const page = await context.newPage();
+  await setPageLikeHuman(page);
 
   console.info('using account: ', process.env.USERNAME);
 
-  await likeHuman(page);
   await page.goto('https://www.zhihu.com/signup');
-  await likeHuman(page);
 
   await page.waitForSelector('.SignContainer-switch span');
   await page.click('.SignContainer-switch span');
 
   await page.waitForSelector('input[name="username"]');
   await page.type('input[name="username"]', process.env.USERNAME || '', { delay: 10 });
-  await page.type('input[name="password"]', process.env.PASSWORD || '', { delay: 15 });
+  await page.type('input[name="password"]', process.env.PASSWORD || '', { delay: 10 });
 
-  await page.click('.SignFlow-submitButton');
+  await Promise.all([checkNeedCapture(page), page.click('.SignFlow-submitButton')]);
 
-  await checkNeedCapture(page);
-
-  let content = await page.$$eval('.ContentItem-title', (eles) => {
-    return eles.map((ele) => {
-      return (ele as HTMLTitleElement).innerText;
+  let content = await page.$$eval('.ContentItem-title a', (eles) => {
+    return eles.map((item) => {
+      let ele = item as HTMLLinkElement;
+      return {
+        text: ele.innerText,
+        href: ele.href,
+      };
     });
   });
 
-  console.info(JSON.stringify(content, undefined, 2));
-
-  await delay(10000);
-
+  await writeJson(pathResolve(__dirname, `../data/${Date.now()}.json`), content);
   await browser.close();
 })();
 
-// from https://zhuanlan.zhihu.com/p/43581988
-async function likeHuman(page: puppeteer.Page) {
-  await page.evaluate(() => {
+// from https://intoli.com/blog/not-possible-to-block-chrome-headless/
+async function setPageLikeHuman(page: puppeteer.Page) {
+  await page.setUserAgent(
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+  );
+
+  await page.evaluateOnNewDocument(() => {
     // overwrite the `languages` property to use a custom getter
     Object.defineProperty(navigator, 'languages', {
       get() {
@@ -80,10 +84,6 @@ async function likeHuman(page: puppeteer.Page) {
         : originalQuery(parameters);
     };
   });
-
-  await page.setUserAgent(
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-  );
 }
 
 async function checkNeedCapture(page: puppeteer.Page) {
@@ -94,18 +94,15 @@ async function checkNeedCapture(page: puppeteer.Page) {
     console.info('navigate success');
   } catch (e) {
     console.info('navigate failed');
-    try {
-      await page.waitForSelector('.Captcha-chineseImg', { timeout: 1000 });
-      await captureCrack(page);
-    } catch (err) {
-      console.info('Captcha failed');
-      // do nothing
-    }
+
+    await page.waitForSelector('.Captcha-chineseImg', { timeout: 1000 });
+    await captureCrack(page);
   }
 }
 
 async function captureCrack(page: puppeteer.Page) {
   console.info('=====captureCrack====');
+
   await page.waitForSelector('.Captcha-chineseImg', { timeout: 1000 });
   await delay();
 

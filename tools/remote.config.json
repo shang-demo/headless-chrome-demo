@@ -2,7 +2,7 @@
   "dev": {
     "url": "git@gitlab.com:xinshangshangxin/ci-test.git",
     "remote": "ci-test",
-    "branch": "__package_name__"
+    "branch": "headless-zhihu-login"
   },
   "prod": {
     "url": "git@gitlab.com:demoshang/server-projects.git",

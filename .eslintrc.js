@@ -3,5 +3,7 @@ module.exports = {
     framework: false,
   },
   extends: ['@s4p/eslint-config'],
-  rules: {},
+  rules: {
+    'no-console': [0],
+  },
 };
