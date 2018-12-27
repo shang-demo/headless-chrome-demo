@@ -3,7 +3,7 @@ import { resolve as pathResolve } from 'path';
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    // headless: false,
   });
   const context = await browser.createIncognitoBrowserContext();
   const page = await context.newPage();
@@ -16,7 +16,7 @@ import { resolve as pathResolve } from 'path';
   await autoScroll(page);
 
   await page.screenshot({
-    path: pathResolve(__dirname, '../jd.png'),
+    path: pathResolve(__dirname, '../data/jd.png'),
     fullPage: true,
   });
 

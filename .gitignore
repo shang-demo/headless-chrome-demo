@@ -45,3 +45,6 @@ Temporary Items
 dist/
 **/node_modules/
 .vscode/
+
+data/**/*
+!data/.gitkeep
