@@ -44,3 +44,4 @@ Temporary Items
 
 dist/
 **/node_modules/
+.vscode/
