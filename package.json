@@ -14,11 +14,13 @@
     "build": "gulp build"
   },
   "dependencies": {
+    "puppeteer": "^1.11.0",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
     "@s4p/eslint-config": "^1.0.0",
     "@types/node": "^10.12.18",
+    "@types/puppeteer": "^1.11.1",
     "del": "^3.0.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
