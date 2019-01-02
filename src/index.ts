@@ -5,7 +5,7 @@ import rp from 'request-promise';
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: process.env.NODE_ENV === 'production',
     ignoreHTTPSErrors: true,
   });
 
@@ -20,7 +20,7 @@ import rp from 'request-promise';
     await browser.close();
   } catch (e) {
     console.warn(e);
-    // await browser.close();
+    await browser.close();
   }
 })();
 
