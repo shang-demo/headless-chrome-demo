@@ -53,4 +53,4 @@ ENV NODE_ENV=production
 # EXPOSE 80
 # CMD ["pm2-runtime", "start", "index.js"]
 
-CMD ["node", "start", "index.js"]
+CMD ["node", "index.js"]

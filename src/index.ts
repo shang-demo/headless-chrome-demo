@@ -40,7 +40,7 @@ async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) 
   const page = await context.newPage();
   await setPageLikeNormal(page);
 
-  console.info('using account: ', process.env.USERNAME);
+  console.info('using account: ', process.env.ZHIHU_USERNAME);
 
   await page.setRequestInterception(true);
   page.on('request', (request) => {
@@ -91,6 +91,7 @@ async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) 
     });
   });
 
+  console.info(JSON.stringify(content && content[0]));
   await writeJson(pathResolve(__dirname, `../data/${Date.now()}.json`), content);
 }
 
