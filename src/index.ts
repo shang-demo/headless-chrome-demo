@@ -7,7 +7,7 @@ import rp from 'request-promise';
   let options: puppeteer.LaunchOptions = {
     ignoreHTTPSErrors: true,
     headless: false,
-    devtools: true,
+    // devtools: true,
   };
 
   if (process.env.NODE_ENV === 'production') {
@@ -66,8 +66,8 @@ async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) 
   await page.click('.SignContainer-switch span');
 
   await page.waitForSelector('input[name="username"]');
-  await page.type('input[name="username"]', process.env.USERNAME || '', { delay: 10 });
-  await page.type('input[name="password"]', process.env.PASSWORD || '', { delay: 10 });
+  await page.type('input[name="username"]', process.env.ZHIHU_USERNAME || '', { delay: 10 });
+  await page.type('input[name="password"]', process.env.ZHIHU_PASSWORD || '', { delay: 10 });
 
   let { language } = await loginClick(page);
 
