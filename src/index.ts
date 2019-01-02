@@ -4,10 +4,22 @@ import puppeteer from 'puppeteer';
 import rp from 'request-promise';
 
 (async () => {
-  const browser = await puppeteer.launch({
-    headless: process.env.NODE_ENV === 'production',
+  let options: puppeteer.LaunchOptions = {
     ignoreHTTPSErrors: true,
-  });
+    headless: false,
+    devtools: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') {
+    options = {
+      executablePath: '/usr/bin/chromium-browser',
+      headless: true,
+      ignoreHTTPSErrors: true,
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+    };
+  }
+
+  const browser = await puppeteer.launch(options);
 
   const len = 1;
   try {
