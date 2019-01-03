@@ -13,9 +13,6 @@ RUN npm run build
 
 FROM keymetrics/pm2:10-alpine
 
-ENV CHROME_BIN="/usr/bin/chromium-browser" \
-      NODE_ENV="production"
-
 RUN set -x \
       && apk update \
       && apk upgrade \
@@ -27,8 +24,6 @@ RUN set -x \
       chromium \
       # install chinese font
       && wget -qO- https://raw.githubusercontent.com/yakumioto/YaHei-Consolas-Hybrid-1.12/master/install.sh | sh \
-      && npm install puppeteer-core@1.10.0 --silent \
-      \
       # Cleanup
       && apk del --no-cache make gcc g++ python binutils-gold gnupg libstdc++ \
       && rm -rf /usr/include \
@@ -47,8 +42,8 @@ RUN yarnpkg
 # copy project dist files
 COPY --from=build /app/dist/ .
 
-
-ENV NODE_ENV=production
+ENV CHROME_BIN "/usr/bin/chromium-browser"
+ENV NODE_ENV "production"
 
 # EXPOSE 80
 # CMD ["pm2-runtime", "start", "index.js"]

@@ -11,11 +11,20 @@ import rp from 'request-promise';
   };
 
   if (process.env.NODE_ENV === 'production') {
+    console.info(`chrome path ${process.env.CHROME_BIN}`);
+
     options = {
-      executablePath: '/usr/bin/chromium-browser',
-      headless: true,
-      ignoreHTTPSErrors: true,
-      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      executablePath: process.env.CHROME_BIN,
+      args: [
+        '--no-sandbox',
+        '--disable-gpu',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+
+        '--ignore-certificate-errors',
+        '--allow-running-insecure-content',
+        '--mute-audio',
+      ],
     };
   }
 
@@ -35,6 +44,12 @@ import rp from 'request-promise';
     await browser.close();
   }
 })();
+
+async function pageClick(page: puppeteer.Page, selector: string) {
+  await page.$eval(selector, (ele) => {
+    (ele as HTMLElement).click();
+  });
+}
 
 async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) {
   const page = await context.newPage();
@@ -57,13 +72,17 @@ async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) 
 
   await delay();
   await page.goto('https://www.zhihu.com/signup');
+  await page.setViewport({
+    width: 1200,
+    height: 800,
+  });
 
   if (!isCheck) {
     return;
   }
 
   await page.waitForSelector('.SignContainer-switch span');
-  await page.click('.SignContainer-switch span');
+  await pageClick(page, '.SignContainer-switch span');
 
   await page.waitForSelector('input[name="username"]');
   await page.type('input[name="username"]', process.env.ZHIHU_USERNAME || '', { delay: 10 });
@@ -115,7 +134,7 @@ async function loginClick(page: puppeteer.Page): Promise<{ language?: 'en' | 'cn
         timeout: navigationTimeout,
         waitUntil: 'networkidle2',
       }),
-      page.click('.SignFlow-submitButton'),
+      pageClick(page, '.SignFlow-submitButton'),
     ]).then(() => {
       return {};
     }),
@@ -156,7 +175,7 @@ async function getCaptchaStr(page: puppeteer.Page, timeout: number) {
     });
 
     console.info('click Captcha-chineseRefreshButton');
-    page.click('.Captcha-chineseRefreshButton');
+    pageClick(page, '.Captcha-chineseRefreshButton');
 
     setTimeout(() => {
       reject(new Error('timeout'));
