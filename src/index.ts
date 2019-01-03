@@ -3,6 +3,8 @@ import { resolve as pathResolve } from 'path';
 import puppeteer from 'puppeteer';
 import rp from 'request-promise';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 (async () => {
   let options: puppeteer.LaunchOptions = {
     ignoreHTTPSErrors: true,
@@ -10,7 +12,7 @@ import rp from 'request-promise';
     // devtools: true,
   };
 
-  if (process.env.NODE_ENV === 'production') {
+  if (isProd) {
     console.info(`chrome path ${process.env.CHROME_BIN}`);
 
     options = {
@@ -82,11 +84,16 @@ async function newZhihuPage(context: puppeteer.BrowserContext, isCheck = false) 
   }
 
   await page.waitForSelector('.SignContainer-switch span');
+
+  if (!isProd) {
+    await delay(5000);
+  }
+
   await pageClick(page, '.SignContainer-switch span');
 
   await page.waitForSelector('input[name="username"]');
-  await page.type('input[name="username"]', process.env.ZHIHU_USERNAME || '', { delay: 10 });
-  await page.type('input[name="password"]', process.env.ZHIHU_PASSWORD || '', { delay: 10 });
+  await page.type('input[name="username"]', process.env.ZHIHU_USERNAME || '', { delay: 100 });
+  await page.type('input[name="password"]', process.env.ZHIHU_PASSWORD || '', { delay: 100 });
 
   let { language } = await loginClick(page);
 
