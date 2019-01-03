@@ -2,8 +2,9 @@ import puppeteer from 'puppeteer';
 import { resolve as pathResolve } from 'path';
 
 (async () => {
+  let headless = true;
   const browser = await puppeteer.launch({
-    // headless: false,
+    headless,
   });
   const context = await browser.createIncognitoBrowserContext();
   const page = await context.newPage();
@@ -15,8 +16,16 @@ import { resolve as pathResolve } from 'path';
 
   await autoScroll(page);
 
+  if (headless) {
+    // Generating a pdf is currently only supported in Chrome headless.
+    await page.pdf({
+      path: pathResolve(__dirname, '../data/jd.pdf'),
+    });
+  }
+
   await page.screenshot({
-    path: pathResolve(__dirname, '../data/jd.png'),
+    path: pathResolve(__dirname, '../data/jd.jpeg'),
+    type: 'jpeg',
     fullPage: true,
   });
 
