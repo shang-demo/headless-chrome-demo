@@ -1,11 +1,11 @@
 {
   "dev": {
-    "url": "git@gitlab.com:xinshangshangxin/ci-test.git",
-    "remote": "ci-test",
-    "branch": "headless-zhihu-login"
+    "url": "git@github.com:shang-demo/headless-chrome-demo.git",
+    "remote": "demo",
+    "branch": "zhihu-login"
   },
   "prod": {
-    "url": "git@gitlab.com:demoshang/server-projects.git",
+    "url": "",
     "remote": "prod",
     "branch": "__package_name__"
   }
