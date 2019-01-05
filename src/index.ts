@@ -2,7 +2,8 @@ import puppeteer from 'puppeteer';
 import { resolve as pathResolve } from 'path';
 
 (async () => {
-  let headless = true;
+  console.info('runing...');
+  let headless = false;
   const browser = await puppeteer.launch({
     headless,
   });
@@ -14,8 +15,16 @@ import { resolve as pathResolve } from 'path';
     height: 800,
   });
 
+  console.info('scrolling');
   await autoScroll(page);
 
+  console.info('scroll done');
+
+  await new Promise((resolve) => {
+    setTimeout(resolve, 3000);
+  });
+
+  console.info('start save pdf');
   if (headless) {
     // Generating a pdf is currently only supported in Chrome headless.
     await page.pdf({
@@ -23,6 +32,7 @@ import { resolve as pathResolve } from 'path';
     });
   }
 
+  console.info('start save jpeg');
   await page.screenshot({
     path: pathResolve(__dirname, '../data/jd.jpeg'),
     type: 'jpeg',
@@ -30,6 +40,7 @@ import { resolve as pathResolve } from 'path';
   });
 
   await browser.close();
+  console.info('ended');
 })();
 
 async function autoScroll(page: puppeteer.Page) {
