@@ -28,7 +28,7 @@
 
 ### 安装 && 启动
 
- 需要手动安装 chrome
+需要手动安装 chrome
 `npm i puppeteer-core`
 自动下载 chrome
 `npm i puppeteer`
@@ -185,7 +185,7 @@ CMD ["node", "index.js"]
 
 ## 参考文档
 
-- [IT IS _NOT_ POSSIBLE TO DETECT AND BLOCK CHROME HEADLESS](https://intoli.com/blog/not-possible-to-block-chrome-headless/)
+- [IT IS _NOT_ POSSIBLE TO DETECT AND BLOCK CHROME HEADLESS](https://intoli.com/blog/not-possible-to-block-chrome-headless/)
 - [Puppeteer as a service](https://pptraas.com/)
 - [截图的诱惑](https://juejin.im/post/5bbc96785188255c72286403)
 - [puppeteer api](https://github.com/GoogleChrome/puppeteer/blob/v1.11.0/docs/api.md)
