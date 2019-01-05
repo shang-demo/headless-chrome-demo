@@ -1,8 +1,8 @@
 {
   "dev": {
-    "url": "git@gitlab.com:xinshangshangxin/ci-test.git",
-    "remote": "ci-test",
-    "branch": "headless-jd-screenshot"
+    "url": "git@github.com:shang-demo/headless-chrome-demo.git",
+    "remote": "demo",
+    "branch": "jd-screenshot"
   },
   "prod": {
     "url": "git@gitlab.com:demoshang/server-projects.git",
